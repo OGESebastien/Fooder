@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    networks:
+      - net
   db:
     image: postgres:latest
     restart: always
@@ -17,3 +19,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge

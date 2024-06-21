@@ -1,23 +1,16 @@
-# Utiliser l'image officielle de Golang comme image de base
+# Use the official Golang image as the base image
 FROM golang:latest
-
-# Définir le répertoire de travail à l'intérieur du conteneur
+# Set the Current Working Directory inside the container
 WORKDIR /app
-
-# Copier les fichiers du projet dans le répertoire de travail
+# Copy go mod file
+COPY go.mod ./
+# Download all dependencies. Dependencies will be cached if the go.mod file is not changed
+RUN go mod download
+# Copy the source from the current directory to the Working Directory inside the container
 COPY . .
-
-# Créer un fichier go.mod pour initialiser le module Go
-RUN go mod tidy
-
-# Installer les dépendances
-RUN go install ./...
-
-# Construire l'application
+# Build the Go app
 RUN go build -o main .
-
-# Exposer le port sur lequel l'application sera disponible
+# Expose port 8080 to the outside world
 EXPOSE 8080
-
-# Commande pour exécuter l'application
+# Command to run the executable
 CMD ["./main"]
